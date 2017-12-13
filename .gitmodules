@@ -1,0 +1,6 @@
+[submodule "pilibs"]
+	path = pilibs
+	url = https://github.com/HomeSmartMesh/pilibs.git
+[submodule "mesh_config"]
+	path = mesh_config
+	url = https://github.com/HomeSmartMesh/mesh_config.git
