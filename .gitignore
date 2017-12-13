@@ -1,1 +1,4 @@
-streamer
+iot_db
+*.o
+*.dblite
+

@@ -59,7 +59,7 @@ ________________________________________________________________________________
 
 #include "utils.hpp"
 
-#include "mqtt.hpp"
+#include "mqtt_db.hpp"
 
 #include "webserver.hpp"
 
@@ -122,18 +122,12 @@ int main(int argc, const char *argv[])
 
 	json config = read_json(app_path.parent_path().string()+"/mesh_config/iot_db_config.json");
 
-	json calib = read_json(app_path.parent_path().string()+"/mesh_config/bme280_calibration.json");
-
 	json nodesinfo = read_json(app_path.parent_path().string()+"/mesh_config/nodes.json");
 
 	Log::config(config["log"]);
 	webserver_c		wbs(config);	//websocket manager : broadcast() and respond()
 	
-	Serial 			stream(config["serial"],calib);	// - process serial port stream : - calibrate sensors values
-									// - provides ready to store measures MAP of Nodes.Sensors.Values,Timestamp
-									// - If not configured to be used then the .update() polling is neutral
-
-	mqtt_c			mqtt(config["mqtt_client"],stream);	//MQTT client app wrapper, will attempt connection on creation if params provided
+	mqtt_db_c		mqtt_db(config["mqtt_client"]);
 
 	db_manager_c	dbm(config["database"]);	//adds values to files and memory db, answers requests
 	
@@ -143,28 +137,22 @@ int main(int argc, const char *argv[])
 	//discard first trash buffer if available right after opening the port
 	//this discard measure is not enough as ibberish appears still
 	
-	stream.update();
-	
 	std::cout << "______________________Main Loop______________________" << std::endl;
 	while (1) 
 	{
-		if(stream.update())
-		{
-			NodeMap_t measures = stream.processBuffer();
-			if(measures.size() != 0)
-			{
-				localActions(measures,wbs);
-				dbm.addMeasures(measures);	//save into the data base (memory db & files db)
-				std::string jMeasures = utl::stringify(measures,"update");//data type is "update"
-				wbs.broadcast(jMeasures);
-				std::string jMeasures2 = utl::stringify2(measures,"update");//data type is "update"
-				wbs.post(jMeasures2);//for another webserver if configured
-				mqtt.publish_measures(measures);
-			}
-		}
-
 		//run() contains the loop needed to process certain QoS messages and reconnect if connection lost
-		mqtt.run();
+		mqtt_db.run();
+
+		// --------- TODO get the measure from MQTT subscription --------- 
+		NodeMap_t measures;
+		if(mqtt_db.getMeasures(measures))
+		{
+			dbm.addMeasures(measures);	//save into the data base (memory db & files db)
+			std::string jMeasures = utl::stringify(measures,"update");//data type is "update"
+			wbs.broadcast(jMeasures);
+			std::string jMeasures2 = utl::stringify2(measures,"update");//data type is "update"
+			wbs.post(jMeasures2);//for another webserver if configured
+		}
 		
 		//5 ms : this is an unnneccessary load if the processing grows up
 		usleep(5000);

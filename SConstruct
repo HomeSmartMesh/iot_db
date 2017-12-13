@@ -9,7 +9,8 @@ env = Environment()
 env.Program(    target='iot_db',
                 source=[Glob('*.cpp'),
                             [   'pilibs/utils.cpp',
-                                'pilibs/mqtt.cpp',
+                                'pilibs/safe_msg.cpp',
+                                'pilibs/mqtt_db.cpp',
                                 'pilibs/webserver.cpp',
                                 'pilibs/db_mgr.cpp',
                                 'pilibs/log.cpp'
