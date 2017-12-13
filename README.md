@@ -22,3 +22,10 @@ Basicall, the micro-steps from the front end websocket request to the websocket 
 ## Filesystem persistance simplicity
 The persistance is not the bottleneck here as data has to fit in RAM first, which leave room for a relaxed and user friendly persistance format.
 It is here text based and structured into files for every sensor and month of data. Users can open files directly in text editors or in excel. Thus no admin client is required.
+
+#C, Cpp clients
+##Install
+```bash
+apt-get install libmosquitto-dev
+sudo apt-get install libmosquittopp-dev
+```
