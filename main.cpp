@@ -81,7 +81,7 @@ using namespace std;
 
 void handle_nodesinfo(std::string &request,json &nodesinfo,std::string &response)
 {
-	std::cout << "handle_config> request>" << request << std::endl;
+	Log::cout << "handle_nodesinfo> request>" << request << Log::Info();
 	json jReq = json::parse(request);//double parsing on getRequestType and here
 	json jResp;
 	try
@@ -93,21 +93,21 @@ void handle_nodesinfo(std::string &request,json &nodesinfo,std::string &response
 	}
 	catch(const std::exception& ex)
 	{
-		std::cout << "handle_nodesinfo> !!! Caught exception \"" << ex.what() << "\"!!!\n";
+		Log::cout << "handle_nodesinfo> !!! Caught exception \"" << ex.what() << "\"!!!" << Log::Error();
 	}
-	std::cout << "handle_nodesinfo> response length: " << response.length() << std::endl;
+	Log::cout << "handle_nodesinfo> response length: " << response.length() << Log::Info();
 }
 
 json read_json(std::string const &filename)
 {
 	if (boost::filesystem::exists(filename))
 	{
-		std::cout << "________________________________________________________________"<< std::endl;
-		std::cout << "Loading : "<< filename << std::endl;
+		Log::cout << "________________________________________________________________"<< Log::Info();
+		Log::cout << "Loading : "<< filename << Log::Info();
 	}
 	else
 	{
-		std::cout << "File not found : "<< filename << std::endl;
+		Log::cout << "File not found : "<< filename << Log::Error();
 		exit(1);
 	}
 	std::ifstream data_file(filename);
@@ -136,8 +136,8 @@ int main(int argc, const char *argv[])
 	//#2 issue, it is likely that someone else is using the port in parallel
 	//discard first trash buffer if available right after opening the port
 	//this discard measure is not enough as ibberish appears still
-	
-	std::cout << "______________________Main Loop______________________" << std::endl;
+	int count = 0;
+	Log::cout << "______________________Main Loop______________________" << Log::Info();
 	while (1) 
 	{
 		//run() contains the loop needed to process certain QoS messages and reconnect if connection lost
@@ -156,7 +156,11 @@ int main(int argc, const char *argv[])
 		
 		//5 ms : this is an unnneccessary load if the processing grows up
 		usleep(5000);
-		
+		count++;
+		if((count %200) == 0)
+		{
+			//std::cout << "Alive " << count << std::endl;
+		}
 		std::string request = wbs.poll();
 		
 		if(!request.empty())
@@ -177,7 +181,7 @@ int main(int argc, const char *argv[])
 			}
 			else
 			{
-				std::cout << "main> Error : undefined request type : " << requestType<<std::endl;
+				Log::cout << "main> Error : undefined request type : " << requestType<< Log::Error();
 			}
 
 			if(!response.empty())
