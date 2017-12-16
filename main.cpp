@@ -120,7 +120,7 @@ int main(int argc, const char *argv[])
 {
 	boost::filesystem::path app_path(argv[0]);
 
-	json config = read_json(app_path.parent_path().string()+"/mesh_config/iot_db_config.json");
+	json config = read_json(app_path.parent_path().string()+"/iot_db_config.json");
 
 	json nodesinfo = read_json(app_path.parent_path().string()+"/mesh_config/nodes.json");
 
