@@ -1,0 +1,35 @@
+{
+    "log":{
+        "logfile":"/home/pi/share/iot_db_log.txt",
+        "help":"'level_out' is for console mode, and the 'level_file' is for the file record",
+        "level_out":"3",
+        "level_file":"3",
+        "levels":{
+            "0":"None",
+            "1":"Error",
+            "2":"Warning",
+            "3":"Info",
+            "4":"Debug"
+        }
+    },
+    "mqtt_client":{
+        "host":"10.0.0.12",
+        "port":1883,
+        "id":"iot_db",
+        "disable":false
+    },
+    "database":{
+        "path":"/home/pi/share/",
+        "loadpaths":"/home/pi/share/2017/",
+        "disable":false
+    },
+    "webserver":{
+        "websocket_url":"ws://10.0.0.44:4348/measures",
+        "disable":false
+    },
+    "webclient":{
+        "http_post":"ws://10.0.0.2:8127/rf_logger",
+        "disable":true
+    }
+
+}
