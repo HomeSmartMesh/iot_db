@@ -1,12 +1,7 @@
-# IoT DB
-Q : Seriously another database ? Why ?
-A : simply because with all the integration efforts of existing solutions requirements are not close to be met. What if it is much easier to implement those requirements ?
-
-# Comparision with existing solutions
-I tried to use existing solutions, currently 3 options are available target is to have them up all the time for benchmarking:
+# IoT db Comparision with existing solutions
 - Mongodb with Node.js proxy for front end
 - redis based solution (to be developed)
-- iot_db (this project)
+- influxDB "update" : actually [influxDB](https://docs.influxdata.com/influxdb/v1.4/introduction/getting_started/) as namely a time series database, is the reason why this custom db project is canceled
 
 # Features
 ## Home Smart Mesh application
@@ -29,3 +24,10 @@ It is here text based and structured into files for every sensor and month of da
 apt-get install libmosquitto-dev
 sudo apt-get install libmosquittopp-dev
 ```
+
+### Environment and Dependencies
+- Scons : a single line for the whole compilation, linker stuf,...
+- C++11 : Modern c++ is easier than javascript (the luxury of having a compiler)
+- Boost 1.60 (filesystem) : A warm welcome to Boost on RPI (see install instructions)
+- Poco-1.7.7 : HTTP server&client, websocket server : https://pocoproject.org/
+- json for modern c++ : json as easy to use as in javascript https://github.com/nlohmann/json (to be replaced by Poco::JSON)
