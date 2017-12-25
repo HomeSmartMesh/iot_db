@@ -3,7 +3,7 @@
         "logfile":"/home/pi/share/iot_db_log.txt",
         "help":"'level_out' is for console mode, and the 'level_file' is for the file record",
         "level_out":"3",
-        "level_file":"3",
+        "level_file":"2",
         "levels":{
             "0":"None",
             "1":"Error",
